@@ -6,13 +6,6 @@ from pocketAPI import Pocket
 from general_utils import *
 from shared_constants import *
 
-# CONSUMER_KEY = '60377-7651f2d14f7afa931f29f981'
-# REDIRECT_URI = 'https://www.youtube.com' #'http://www.lopuch.cz'
-
-# ACCESS_TOKEN = 'fac2e398-1f3a-2382-a687-049439'
-# USER_NAME = 'lukascrhak@gmail.com'
-
-
 # příprava (doladit potvrzování pomocí redirect url)
 # p = Pocket(CONSUMER_KEY,REDIRECT_URI)
 # code = p.get_request_token()
