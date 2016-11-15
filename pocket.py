@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import requests
 import urllib
 from collections import OrderedDict
@@ -102,8 +105,10 @@ if __name__ == '__main__':
 
 	# log the new fetched articles into the db and save them to Pocket
 	if result_parsed_articles != []:
-		cons_key, access_tkn = readTabbedFile(CREDENTIALS_FL)
+		cons_key, access_tkn = readTabbedFile(readTabbedFile(CREDENTIALS_FL))
 		for art_to_log in result_parsed_articles:
+			# @@@ 
+			# art_to_log.extend(batch_time_to_log)
 			SU.logRecord(DB_NM,TBL_NM,*art_to_log.values(),batch_time_to_log) # dictionary turned into list of values
 		for art_to_post in result_parsed_articles[::-1]:
 			pocket_resp = addItemToPocket(cons_key,access_tkn,art_to_post[LINK])

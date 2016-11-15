@@ -1,6 +1,9 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 import os
 import sqlite3
-import sqlobject.sqlbuilder as SOB
+from general_utils import *
 
 def createTable(db:str,tbl_nm:str,tbl_definition,index_col:int=None)->bool:
 	"""
@@ -10,8 +13,9 @@ def createTable(db:str,tbl_nm:str,tbl_definition,index_col:int=None)->bool:
 	"""
 	try:
 		ret = False
-		if os.path.isfile(db):
-			con = sqlite3.connect(db)
+		abs_file_path = absFilePath(db)
+		if os.path.isfile(abs_file_path):
+			con = sqlite3.connect(abs_file_path)
 			cur = con.cursor()
 			cur.execute("PRAGMA table_info({0})".format(tbl_nm))
 
@@ -42,8 +46,9 @@ def logRecord(db,tbl_nm,*to_log):
 	"""
 	if to_log:
 		try:
-			if os.path.isfile(db):
-				con = sqlite3.connect(db)
+			abs_file_path = absFilePath(db)
+			if os.path.isfile(abs_file_path):
+				con = sqlite3.connect(abs_file_path)
 				cur = con.cursor()
 				
 				# get number of columns
@@ -75,8 +80,9 @@ def readLatestRecord(db:str,tbl_nm:str,order_by_col_nr_or_nm,asc_desc:str)->list
 	"""
 	
 	try:
-		if os.path.isfile(db):
-			con = sqlite3.connect(db)
+		abs_file_path = absFilePath(db)
+		if os.path.isfile(abs_file_path):
+			con = sqlite3.connect(abs_file_path)
 			cur = con.cursor()
 			
 			# get column 1 name
