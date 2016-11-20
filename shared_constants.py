@@ -17,3 +17,6 @@ URL = 'http://arstechnica.com/page/'
 
 CREDENTIALS_FL = 'pocket_creds.txt'
 # REDIRECT_URI = 'http://arstechnica.com'
+DEBUG_LOG = 'debug.log'
+
+LOGGING_LEVELS = {'debug':10,'info':20,'warning':30,'error':40,'critical':50}

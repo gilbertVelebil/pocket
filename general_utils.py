@@ -1,7 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import os
+import os, argparse
+
+def prs():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--log_level', type=str, default='info',
+                        help='The desired logging level.')
+    args = parser.parse_args()
+    # returns a () of arguments
+    return args.log_level
 
 def absFilePath(rel_path):
 	"""

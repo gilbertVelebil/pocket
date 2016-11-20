@@ -73,18 +73,33 @@ def bs_tag_has_attr_datatime(tag):
 if __name__ == '__main__':
 	
 	import sqlite_utils as SU
-	import time
+	import time, logging, logging.config
+
+	log_lvl = LOGGING_LEVELS[prs()]
+
+	# logging
+	log_debug_path = absFilePath('logs/logging_debug.log')
+	log_info_path = absFilePath('logs/logging_info.log')
+	logging_conf = absFilePath('logging.conf')
+	logging.config.fileConfig(logging_conf,defaults={'debug_file': log_debug_path,'info_file':log_info_path})
+	logger1 = logging.getLogger(__name__)
+	logger1.setLevel(log_lvl)
 
 	result_parsed_articles = []
 	page_nr = 1
 	batch_time_to_log = int(time.time())
 	SU.createTable(DB_NM,TBL_NM,TBL_DEFINITION,1)
 
+	latest_db_record = SU.readLatestRecord(DB_NM,TBL_NM,ID,'desc')
+	latest_db_id = latest_db_record[0] if latest_db_record else None
+	logger1.debug('latest_db_id (latest recorded article ID): {}'.format(latest_db_id))
+	logger1.debug('===============================================')
+	
 	while True:
-		latest_db_record = SU.readLatestRecord(DB_NM,TBL_NM,ID,'desc')
-		latest_db_id = latest_db_record[0] if latest_db_record else None
+		logger1.debug('PAGE # {}'.format(page_nr))
 		articles_on_page = getArticles('{0}{1}'.format(URL,page_nr))
 		articles_ids = [i[ID] for i in articles_on_page]
+		logger1.debug('articles_ids (IDs of fetched articles TOTALLING {0}): {1}'.format(len(articles_ids),articles_ids))
 
 		# if #1: is there anything in the database or are we processing one Ars Technica page only?
 		if latest_db_id != None:
@@ -97,19 +112,32 @@ if __name__ == '__main__':
 			if latest_db_id_in_articles != None:
 				articles_on_page_undone = articles_on_page [:latest_db_id_in_articles] # scapes the records past the latest logged id (ie. records already processed)
 				result_parsed_articles.extend(articles_on_page_undone)
+				logger1.debug('articles_on_page_undone (IDs of articles fetched AND previously unprocessed, TOTALLING {0}): {1}'.format(len(articles_on_page_undone),[item[ID] for item in articles_on_page_undone]))
+				logger1.debug('result_parsed_articles (so far, TOTALLING {0}): {1}'.format(len(result_parsed_articles),[item[ID] for item in result_parsed_articles]))		
 				break
 		else:
 			result_parsed_articles.extend(articles_on_page)
 			break
+		result_parsed_articles.extend(articles_on_page)
 		page_nr += 1
+		logger1.debug('articles_on_page_undone (IDs of articles fetched AND previously unprocessed, TOTALLING {0}): {1}'.format(len(articles_on_page_undone),[item[ID] for item in articles_on_page_undone]))
+		logger1.debug('result_parsed_articles (so far, TOTALLING {0}): {1}'.format(len(result_parsed_articles),[item[ID] for item in result_parsed_articles]))
+		logger1.debug('-----------------------------------------------')
 
+	logger1.debug('===============================================')
+	logger1.debug('result_parsed_articles (TOTALLING): {0}'.format(len(result_parsed_articles)))
+	logger1.debug('parsed articles IDs: {0}'.format([item[ID] for item in result_parsed_articles]))
 	# log the new fetched articles into the db and save them to Pocket
 	if result_parsed_articles != []:
-		cons_key, access_tkn = readTabbedFile(readTabbedFile(CREDENTIALS_FL))
+		cons_key, access_tkn = readTabbedFile(absFilePath(CREDENTIALS_FL))
 		for art_to_log in result_parsed_articles:
 			# @@@ 
 			# art_to_log.extend(batch_time_to_log)
-			SU.logRecord(DB_NM,TBL_NM,*art_to_log.values(),batch_time_to_log) # dictionary turned into list of values
+			try:
+				SU.logRecord(DB_NM,TBL_NM,*art_to_log.values(),batch_time_to_log) # dictionary turned into list of values
+				logger1.debug('logged into db: {0}'.format(art_to_log))
+			except Exception as e:
+				logger1.info('=== EXCEPTION: {0} for article: {1}'.format(e,art_to_log))
 		for art_to_post in result_parsed_articles[::-1]:
 			pocket_resp = addItemToPocket(cons_key,access_tkn,art_to_post[LINK])
 
