@@ -15,7 +15,8 @@ TBL_DEFINITION = '{0} INTEGER, {1} TEXT, {2} TEXT, {3} TEXT, {4} INTEGER, {5} IN
 
 URL = 'http://arstechnica.com/page/'
 
-CREDENTIALS_FL = 'pocket_creds.txt'
+CREDENTIALS_POCKET_FL = 'pocket_creds.txt'
+CREDENTIALS_DROPBOX_FL = 'dropbox_creds.txt'
 # REDIRECT_URI = 'http://arstechnica.com'
 DEBUG_LOG = 'debug.log'
 

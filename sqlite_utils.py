@@ -7,14 +7,14 @@ from general_utils import *
 
 def createTable(db:str,tbl_nm:str,tbl_definition,index_col:int=None)->bool:
 	"""
-	create a table (if it does not exist) in the given db based on the given definition
-	optional: index column
-	return: True (tbl created), False (tbl already existed)
+	Create a TABLE (if it does not exist) in the DATABASE based on the DEFINITION.
+	optional: index column (default None -> no index is created)
+	return: True (table created), False (table already existed)
 	"""
 	try:
 		ret = False
 		abs_file_path = absFilePath(db)
-		if os.path.isfile(abs_file_path):
+		if os.path.isfile(abs_file_path):	
 			con = sqlite3.connect(abs_file_path)
 			cur = con.cursor()
 			cur.execute("PRAGMA table_info({0})".format(tbl_nm))

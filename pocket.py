@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+# @@@ kontroly
+# ukazatel uploadu na Pocket
+# zjednodušit logování záznamů - aby se pokaždé nemusela sjížděj celá funkce, tj. otevírat a zavírat db...
+
 import requests
 import urllib
 from collections import OrderedDict
@@ -51,7 +55,7 @@ def getArticles(url_addr:str):
 	parsed_articles = []
 	for i in articles:
 		parsed_articles.append(parseArticle(i))
-	return sortListOfDicts(parsed_articles,ID,True)
+	return sortListOfDicts	(parsed_articles,ID,True)
 	# return parsed_articles.sort(key=operator.itemgetter(ID),reverse=True)
 
 # specifically for arstechnica.com!
@@ -88,9 +92,14 @@ if __name__ == '__main__':
 	result_parsed_articles = []
 	page_nr = 1
 	batch_time_to_log = int(time.time())
-	SU.createTable(DB_NM,TBL_NM,TBL_DEFINITION,1)
-
-	latest_db_record = SU.readLatestRecord(DB_NM,TBL_NM,ID,'desc')
+	
+	# create a local copy of a dropbox file
+	dropbox_token = readTabbedFile(absFilePath(CREDENTIALS_DROPBOX_FL))[0]
+	drop = Drop(dropbox_token)
+	db_nm = drop.getTempFile(DB_NM)
+	
+	SU.createTable(db_nm,TBL_NM,TBL_DEFINITION,1)
+	latest_db_record = SU.readLatestRecord(db_nm,TBL_NM,ID,'desc')
 	latest_db_id = latest_db_record[0] if latest_db_record else None
 	logger1.debug('latest_db_id (latest recorded article ID): {}'.format(latest_db_id))
 	logger1.debug('===============================================')
@@ -129,17 +138,23 @@ if __name__ == '__main__':
 	logger1.debug('parsed articles IDs: {0}'.format([item[ID] for item in result_parsed_articles]))
 	# log the new fetched articles into the db and save them to Pocket
 	if result_parsed_articles != []:
-		cons_key, access_tkn = readTabbedFile(absFilePath(CREDENTIALS_FL))
+		cons_key, access_tkn = readTabbedFile(absFilePath(CREDENTIALS_POCKET_FL))
 		for art_to_log in result_parsed_articles:
 			# @@@ 
 			# art_to_log.extend(batch_time_to_log)
 			try:
-				SU.logRecord(DB_NM,TBL_NM,*art_to_log.values(),batch_time_to_log) # dictionary turned into list of values
+				SU.logRecord(db_nm,TBL_NM,*art_to_log.values(),batch_time_to_log) # dictionary turned into list of values
+
 				logger1.debug('logged into db: {0}'.format(art_to_log))
 			except Exception as e:
 				logger1.info('=== EXCEPTION: {0} for article: {1}'.format(e,art_to_log))
+		# upload the local copy of the file back to dropbox, delete the local file
+		_upload_resp = drop.uploadTempFile()
+		if not _upload_resp:
+			logger1.debug('file not uploaded back to Dropbox!')
 		for art_to_post in result_parsed_articles[::-1]:
 			pocket_resp = addItemToPocket(cons_key,access_tkn,art_to_post[LINK])
+			# @@@ kontrola?
 
 		
 

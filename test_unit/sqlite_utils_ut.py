@@ -9,7 +9,20 @@ def prnt(x):
 	print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n')
 
 class CreateTable(unittest.TestCase):
-	pass
+	def test_createTable_PASS_existed(self):
+		pass
+
+	def test_createTable_PASS_created(self):
+		pass
+
+	# def test_createTable_FAIL(self):
+		# pass
+
+
+
+
+
+
 
 
 class LogRecord(unittest.TestCase):

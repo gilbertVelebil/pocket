@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os, argparse
+import dropbox
 
 def prs():
     parser = argparse.ArgumentParser()
@@ -10,6 +11,92 @@ def prs():
     args = parser.parse_args()
     # returns a () of arguments
     return args.log_level
+
+
+class Drop(dropbox.client.DropboxClient):
+
+	def __init__(self,token:str):
+		"""
+		Args:
+			param1: Dropbox token
+	    
+	    Return:
+	    	Dropbox object
+	    """
+		super().__init__(token)
+		import os
+		self.drop_fl_nm = None
+		self.local_file_abs_path = None
+
+	def getTempFile(self,drop_fl_nm:str,local_fl_nm:str=None):
+		"""
+		Args:
+			(param1: Dropbox object)
+			param2: Dropbox file name (str)
+			param3: local file name (str), if not supplied, Dropbox file name is used
+	    
+	    Return:
+	    	the name of the local file into which the content of the Dropbox file was dumped(as string)
+	    """
+
+		self.drop_fl_nm = drop_fl_nm
+		self.local_file_abs_path = absFilePath(local_fl_nm) if local_fl_nm else absFilePath(drop_fl_nm)
+		self.resp = self.get_file('/{}'.format(self.drop_fl_nm))
+		# @@@ kontrola 200,400,404
+		self.drop_file_content = self.resp.read()
+		self.local_fl = open(self.local_file_abs_path,'wb')
+		self.local_fl.write(self.drop_file_content)
+		self.local_fl.close()
+		return self.local_file_abs_path
+		# self.local_fl = open(self.local_file_abs_path,'rb')
+		# return self.local_fl
+
+	def uploadTempFile(self,drop_fl_nm:str=None,local_fl_nm:str=None,del_local=True):
+		"""
+		Args:
+			(param1: Dropbox object)
+			param2: Dropbox file name (str), if not supplied, getself. is used
+			param3: local file name (str), if not supplied, self. is used
+	    	param3: bool delete local file, def. True
+	    Return:
+	    	Dropbox put_file response
+	    	if local file name/Dropbox file name not supplied and has not been created by getTemplateFile,
+	    	return False
+	    """
+	    # Dropbox file name
+		if drop_fl_nm:
+			self.drop_fl_nm = drop_fl_nm
+		elif not self.drop_fl_nm:
+			return False
+	    # local file name
+		if local_fl_nm:
+			self.local_file_abs_path = absFilePath(local_fl_nm)
+		elif not self.local_file_abs_path:
+			return False
+
+		self.local_fl = open(self.local_file_abs_path,'rb')
+		resp = self.put_file('/{}'.format(self.drop_fl_nm),self.local_fl,overwrite=True)
+		self.local_fl.close()
+		if del_local:
+			os.remove(self.local_fl.name)
+
+		# @@@ alternative: True
+		return resp
+
+
+
+# drop_file = client.get_file('/ars_articles.db')
+
+# put_file('/ars_articles.db',fl,overwrite=True)
+ 
+# drop_file_cont = drop_file.read()
+# temp_file = tempfile.NamedTemporaryFile()
+# temp_file.write(drop_file_cont)
+
+# con = sqlite3.connect(temp_file.name)
+# cur = con.cursor()
+# resp = cur.execute('SELECT dttime_log, COUNT(*) FROM articles GROUP BY 1')
+		
 
 def absFilePath(rel_path):
 	"""
