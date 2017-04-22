@@ -51,7 +51,7 @@ class Drop(dropbox.Dropbox):
 					self.local_file_abs_path = absFilePath(local_fl_nm)
 		# c) none supplied
 		else:
-			absFilePath(drop_fl_nm)
+			self.local_file_abs_path = absFilePath(drop_fl_nm)
 
 		# XXX
 		# self.local_file_abs_path = absFilePath(local_fl_nm) if local_fl_nm else absFilePath(drop_fl_nm)
