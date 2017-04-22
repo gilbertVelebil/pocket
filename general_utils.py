@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+# @@@ Drop.getTempFile a Drop.uploadTempFile - dodelat akce pro except Exception
 
 import os, argparse
 import dropbox
@@ -13,7 +14,8 @@ def prs():
     return args.log_level
 
 
-class Drop(dropbox.client.DropboxClient):
+# class Drop(dropbox.client.DropboxClient):
+class Drop(dropbox.Dropbox):
 
 	def __init__(self,token:str):
 		"""
@@ -40,14 +42,34 @@ class Drop(dropbox.client.DropboxClient):
 	    """
 
 		self.drop_fl_nm = drop_fl_nm
-		self.local_file_abs_path = absFilePath(local_fl_nm) if local_fl_nm else absFilePath(drop_fl_nm)
-		self.resp = self.get_file('/{}'.format(self.drop_fl_nm))
-		# @@@ kontrola 200,400,404
-		self.drop_file_content = self.resp.read()
-		self.local_fl = open(self.local_file_abs_path,'wb')
-		self.local_fl.write(self.drop_file_content)
-		self.local_fl.close()
+		if local_fl_nm:
+				# a) relative local file name supplied
+				if local_fl_nm[0] == '/':
+					self.local_file_abs_path = local_fl_nm
+				# b) absolute local file name supplied
+				else:
+					self.local_file_abs_path = absFilePath(local_fl_nm)
+		# c) none supplied
+		else:
+			absFilePath(drop_fl_nm)
+
+		# XXX
+		# self.local_file_abs_path = absFilePath(local_fl_nm) if local_fl_nm else absFilePath(drop_fl_nm)
+		# self.resp = self.get_file('/{}'.format(self.drop_fl_nm))
+		try:
+			self.files_download_to_file(self.local_file_abs_path,'/{}'.format(self.drop_fl_nm))
+		except ApiError:
+			return False
+
+		# XXX
+		# self.drop_file_content = self.resp.read()
+		# self.local_fl = open(self.local_file_abs_path,'wb')
+		# self.local_fl.write(self.drop_file_content)
+		# self.local_fl.close()
+		
 		return self.local_file_abs_path
+		
+		# XXX
 		# self.local_fl = open(self.local_file_abs_path,'rb')
 		# return self.local_fl
 
@@ -63,26 +85,49 @@ class Drop(dropbox.client.DropboxClient):
 	    	if local file name/Dropbox file name not supplied and has not been created by getTemplateFile,
 	    	return False
 	    """
-	    # Dropbox file name
-		if drop_fl_nm:
-			self.drop_fl_nm = drop_fl_nm
-		elif not self.drop_fl_nm:
-			return False
+	    	    
+	    # XXX
 	    # local file name
+		# if local_fl_nm:
+		# 	self.local_file_abs_path = absFilePath(local_fl_nm)
+		# elif not self.local_file_abs_path:
+		# 	return False
+
+
+		# local file name supplied
 		if local_fl_nm:
-			self.local_file_abs_path = absFilePath(local_fl_nm)
+				# a) relative local file name supplied
+				if local_fl_nm[0] == '/':
+					self.local_file_abs_path = local_fl_nm
+				# b) absolute local file name supplied
+				else:
+					self.local_file_abs_path = absFilePath(local_fl_nm)
+		# c) none supplied >> self.local_file_abs_path is used, else return False
 		elif not self.local_file_abs_path:
 			return False
 
-		self.local_fl = open(self.local_file_abs_path,'rb')
-		resp = self.put_file('/{}'.format(self.drop_fl_nm),self.local_fl,overwrite=True)
-		self.local_fl.close()
-		if del_local:
-			os.remove(self.local_fl.name)
+		# dropbox file name
+		# supplied
+		if drop_fl_nm:
+			self.drop_fl_nm = drop_fl_nm
+		# self.drop_fl_nm used or else, derived from local file name
+		elif not self.drop_fl_nm:
+			self.drop_fl_nm = os.path.basename(self.local_file_abs_path)
+		
+		# XXX
+		# self.local_fl = open(self.local_file_abs_path,'rb')
+		# resp = self.put_file('/{}'.format(self.drop_fl_nm),self.local_fl,overwrite=True)
+		# self.local_fl.close()
+		try:
+			with open(self.local_file_abs_path,'rb') as _local_fl:
+				resp = self.files_upload(_local_fl.read(), '/{}'.format(self.drop_fl_nm), mode=dropbox.files.WriteMode('overwrite'))
+			if del_local:
+				os.remove(self.local_file_abs_path)
+		except Exception:
+			return False
 
 		# @@@ alternative: True
 		return resp
-
 
 
 # drop_file = client.get_file('/ars_articles.db')
