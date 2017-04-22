@@ -78,6 +78,7 @@ if __name__ == '__main__':
 	
 	import sqlite_utils as SU
 	import time, logging, logging.config
+	import os
 
 	log_lvl = LOGGING_LEVELS[prs()]
 
@@ -96,7 +97,17 @@ if __name__ == '__main__':
 	# create a local copy of a dropbox file
 	dropbox_token = readTabbedFile(absFilePath(CREDENTIALS_DROPBOX_FL))[0]
 	drop = Drop(dropbox_token)
-	db_nm = drop.getTempFile(DB_NM)
+	
+	local_path = readTabbedFile(absFilePath(LOCAL_FILE_ADDRESS))
+	# local file path defined in the parameter file
+	if local_path:
+		local_path = local_path[0]
+		if os.path.isdir(local_path):
+			local_path = os.path.join(local_path,DB_NM)
+		else:
+			# local file path = predifend file name stored in script directory
+			local_path = None
+	db_nm = drop.getTempFile(drop_fl_nm=DB_NM,local_fl_nm=local_path)
 	
 	SU.createTable(db_nm,TBL_NM,TBL_DEFINITION,1)
 	latest_db_record = SU.readLatestRecord(db_nm,TBL_NM,ID,'desc')

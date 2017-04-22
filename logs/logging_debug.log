@@ -1,4 +1,2 @@
-2017-04-22 14:02:40,933 - dropbox - INFO - Request to files/download
-2017-04-22 14:03:01,568 - __main__ - INFO - === EXCEPTION: UNIQUE constraint failed: articles.id for article: OrderedDict([('id', 1005065), ('link', 'https://arstechnica.com/gaming/2017/04/one-upping-the-nes-classic-edition-with-the-raspberry-pi-3-and-retropie/'), ('title', 'One-upping the NES Classic Edition with the Raspberry Pi 3 and RetroPie'), ('author', 'Andrew Cunningham'), ('dttime', 1492353999)])
-2017-04-22 14:03:02,399 - __main__ - INFO - === EXCEPTION: UNIQUE constraint failed: articles.id for article: OrderedDict([('id', 1064167), ('link', 'https://arstechnica.com/gaming/2017/04/mass-effect-andromeda-giveaway/'), ('title', 'The MASSive Mass Effect: Andromeda writing contest'), ('author', 'Lee Hutchinson'), ('dttime', 1492001128)])
-2017-04-22 14:03:02,490 - dropbox - INFO - Request to files/upload
+2017-04-22 15:34:22,037 - dropbox - INFO - Request to files/download
+2017-04-22 15:34:26,372 - dropbox - INFO - Request to files/upload
