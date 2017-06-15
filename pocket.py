@@ -54,19 +54,29 @@ def getArticles(url_addr:str):
 	articles = BS(html,'html.parser',parse_only=SS('article'))
 	parsed_articles = []
 	for i in articles:
-		parsed_articles.append(parseArticle(i))
+		parsing_res = parseArticle(i)
+		if parsing_res:
+			parsed_articles.append(parsing_res)
 	return sortListOfDicts	(parsed_articles,ID,True)
 	# return parsed_articles.sort(key=operator.itemgetter(ID),reverse=True)
 
 # specifically for arstechnica.com!
 def parseArticle(art):
 	res = OrderedDict()
-	res['id'] = int(art['data-post-id'])
-	res['link'] = art.header.a['href']
-	res['title'] = art.header.a.text
-	res['author'] = art.find_all(itemprop='name')[0].text
-	res['dttime'] = int(art.find_all(bs_tag_has_attr_datatime)[0]['data-time'])
-	return res
+	try:
+		res['id'] = int(art['data-post-id'])
+		res['link'] = art.header.a['href']
+		res['title'] = art.header.a.text
+		res['author'] = art.find_all(itemprop='name')[0].text
+		res['dttime'] = int(art.find_all(bs_tag_has_attr_datatime)[0]['data-time'])
+	except Exception as e:
+		if 'id' in res and 'link' in res:
+			res['title'],res['author'],res['dttime'] = '-','-',1
+		else:
+			logger1.info('=== EXCEPTION: {0} for parsing article: {1}'.format(e,art))
+			res = None
+	finally:
+		return res
 
 # BeautifulSoup aux funciton
 def bs_tag_has_attr_datatime(tag):
