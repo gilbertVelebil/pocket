@@ -4,3 +4,51 @@
 2017-06-15 20:52:10,523 - dropbox - INFO - Request to files/download
 2017-06-15 21:00:01,704 - dropbox - INFO - Request to files/download
 2017-06-15 21:00:43,441 - dropbox - INFO - Request to files/upload
+2017-09-08 23:00:56,716 - dropbox - INFO - Request to files/download
+2017-09-08 23:01:17,621 - __main__ - INFO - === EXCEPTION: UNIQUE constraint failed: articles.id for article: OrderedDict([('id', 1157809), ('link', 'https://arstechnica.com/information-technology/2017/09/how-to-hurricane-proof-a-web-server/'), ('title', 'How to hurricane-proof a Web server'), ('author', 'Lee Hutchinson'), ('dttime', 1504783826)])
+2017-09-08 23:01:20,743 - dropbox - INFO - Request to files/upload
+2017-10-03 21:10:38,923 - dropbox - INFO - Request to files/download
+2017-10-03 21:11:09,514 - __main__ - INFO - === EXCEPTION: UNIQUE constraint failed: articles.id for article: OrderedDict([('id', 1174661), ('link', 'https://arstechnica.com/tech-policy/2017/10/supreme-courts-new-term-surveillance-hacking-sports-betting-and-cake-too/'), ('title', 'Supreme Court’s new term: Surveillance, hacking, sports betting—and cake, too'), ('author', 'David Kravets'), ('dttime', 1506938439)])
+2017-10-03 21:11:14,149 - dropbox - INFO - Request to files/upload
+2017-10-10 21:34:43,984 - dropbox - INFO - Request to files/download
+2017-10-10 21:35:12,398 - dropbox - INFO - Request to files/upload
+2017-10-18 20:56:20,564 - dropbox - INFO - Request to files/download
+2017-10-18 20:56:33,637 - __main__ - INFO - === EXCEPTION: UNIQUE constraint failed: articles.id for article: OrderedDict([('id', 1172035), ('link', 'https://arstechnica.com/gadgets/2017/10/pixel-2-and-2-xl-review-the-best-android-phone-you-can-buy/'), ('title', 'Pixel 2 and 2 XL review—The best Android phone you can buy'), ('author', 'Ron Amadeo'), ('dttime', 1508245243)])
+2017-10-18 20:56:34,671 - dropbox - INFO - Request to files/upload
+2017-10-22 17:36:26,721 - dropbox - INFO - Request to files/download
+2017-10-22 17:36:31,841 - dropbox - INFO - Request to files/upload
+2017-10-22 21:09:31,940 - dropbox - INFO - Request to files/download
+2017-10-22 21:09:35,755 - dropbox - INFO - Request to files/upload
+2017-10-24 23:10:06,531 - dropbox - INFO - Request to files/download
+2017-10-24 23:10:21,923 - dropbox - INFO - Request to files/upload
+2017-10-26 22:01:07,718 - dropbox - INFO - Request to files/download
+2017-10-26 22:01:12,865 - dropbox - INFO - Request to files/upload
+2017-10-29 16:14:11,317 - dropbox - INFO - Request to files/download
+2017-10-29 16:14:18,416 - dropbox - INFO - Request to files/upload
+2017-11-04 19:34:07,520 - dropbox - INFO - Request to files/download
+2017-11-04 19:34:17,036 - dropbox - INFO - Request to files/upload
+2017-11-05 22:36:43,783 - dropbox - INFO - Request to files/download
+2017-11-05 22:36:47,973 - dropbox - INFO - Request to files/upload
+2017-11-12 22:36:57,331 - dropbox - INFO - Request to files/download
+2017-11-12 22:37:23,339 - dropbox - INFO - Request to files/upload
+2017-11-25 21:51:28,928 - dropbox - INFO - Request to files/download
+2017-11-25 21:51:43,066 - __main__ - INFO - === EXCEPTION: UNIQUE constraint failed: articles.id for article: OrderedDict([('id', 1203419), ('link', 'https://arstechnica.com/science/2017/11/the-dream-chaser-spacecraft-has-completed-a-successful-free-flight/'), ('title', 'Dream Chaser flight test update: The video is pretty awesome'), ('author', 'Eric Berger'), ('dttime', 1510768536)])
+2017-11-25 21:51:43,451 - __main__ - INFO - === EXCEPTION: UNIQUE constraint failed: articles.id for article: OrderedDict([('id', 1202003), ('link', 'https://arstechnica.com/tech-policy/2017/11/bay-area-join-us-1115-for-a-brief-history-of-encryption-and-the-law/'), ('title', 'Bay Area: Join us 11/15 for a brief history of encryption and the law'), ('author', 'Annalee Newitz'), ('dttime', 1510605415)])
+2017-11-25 21:51:43,503 - dropbox - INFO - Request to files/upload
+2017-11-30 21:33:03,356 - dropbox - INFO - Request to files/download
+2017-11-30 21:33:10,702 - dropbox - INFO - Request to files/upload
+2017-12-04 23:43:02,235 - dropbox - INFO - Request to files/download
+2017-12-04 23:43:08,881 - dropbox - INFO - Request to files/upload
+2017-12-07 22:37:50,175 - dropbox - INFO - Request to files/download
+2017-12-07 22:37:55,374 - dropbox - INFO - Request to files/upload
+2017-12-10 20:26:22,710 - dropbox - INFO - Request to files/download
+2017-12-10 20:26:29,864 - dropbox - INFO - Request to files/upload
+2017-12-17 21:29:55,276 - dropbox - INFO - Request to files/download
+2017-12-17 21:30:20,412 - __main__ - INFO - === EXCEPTION: UNIQUE constraint failed: articles.id for article: OrderedDict([('id', 1228653), ('link', 'https://arstechnica.com/gadgets/2017/12/android-wear-gets-updated-to-android-8-0-oreo/'), ('title', 'Android Wear gets updated to Android 8.0 Oreo [Update]'), ('author', 'Ron Amadeo'), ('dttime', 1513093201)])
+2017-12-17 21:30:20,571 - dropbox - INFO - Request to files/upload
+2017-12-18 22:20:33,147 - dropbox - INFO - Request to files/download
+2017-12-18 22:20:36,238 - dropbox - INFO - Request to files/upload
+2017-12-21 20:21:15,993 - dropbox - INFO - Request to files/download
+2017-12-21 20:21:29,419 - dropbox - INFO - Request to files/upload
+2017-12-28 21:37:07,929 - dropbox - INFO - Request to files/download
+2017-12-28 21:37:21,647 - dropbox - INFO - Request to files/upload
